@@ -1,0 +1,11 @@
+---
+- name: Ensure rsyslog is started/restarted and enabled
+  service:
+    name: rsyslog
+    state: restarted
+    enabled: True
+    masked: False
+    daemon_reload: True
+  listen: start_restart_rsyslog
+
+...

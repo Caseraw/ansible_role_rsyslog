@@ -1,0 +1,37 @@
+---
+- name: Ensure rsyslog is installed
+  package:
+    name: '{{ role_rsyslog_packages }}'
+    state: present
+  notify: start_restart_rsyslog
+
+- name: Deploy rsyslog configuration from template
+  template:
+    src: '{{ role_rsyslog_conf_file.src }}'
+    dest: '{{ role_rsyslog_conf_file.dest }}'
+    backup: '{{ role_rsyslog_conf_file.backup | default(omit) }}'
+    attributes: '{{ role_rsyslog_conf_file.attributes | default(omit) }}'
+    owner: '{{ role_rsyslog_conf_file.owner | default("root") }}'
+    group: '{{ role_rsyslog_conf_file.group | default("root") }}'
+    mode: '{{ role_rsyslog_conf_file.mode | default("0640") }}'
+    block_start_string: '{{ role_rsyslog_conf_file.block_start_string | default(omit) }}'
+    block_end_string: '{{ role_rsyslog_conf_file.block_end_string | default(omit) }}'
+    variable_start_string: '{{ role_rsyslog_conf_file.variable_start_string | default(omit) }}'
+    variable_end_string: '{{ role_rsyslog_conf_file.variable_end_string | default(omit) }}'
+    lstrip_blocks: '{{ role_rsyslog_conf_file.lstrip_blocks | default(omit) }}'
+    trim_blocks: '{{ role_rsyslog_conf_file.trim_blocks | default(omit) }}'
+    newline_sequence: '{{ role_rsyslog_conf_file.newline_sequence | default(omit) }}'
+    output_encoding: '{{ role_rsyslog_conf_file.output_encoding | default(omit) }}'
+    selevel: '{{ role_rsyslog_conf_file.selevel | default(omit) }}'
+    serole: '{{ role_rsyslog_conf_file.serole | default(omit) }}'
+    setype: '{{ role_rsyslog_conf_file.setype | default(omit) }}'
+    seuser: '{{ role_rsyslog_conf_file.seuser | default(omit) }}'
+    unsafe_writes: '{{ role_rsyslog_conf_file.unsafe_writes | default(omit) }}'
+    follow: '{{ role_rsyslog_conf_file.follow | default(omit) }}'
+    force: '{{ role_rsyslog_conf_file.force | default(omit) }}'
+    validate: '{{ role_rsyslog_conf_file.validate | default(omit) }}'
+  when:
+    - role_rsyslog_conf_file is defined
+  notify: start_restart_rsyslog
+
+...

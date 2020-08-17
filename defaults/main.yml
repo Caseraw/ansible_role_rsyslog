@@ -1,0 +1,41 @@
+---
+### Software packages required for installing rsyslog.
+role_rsyslog_packages:
+  - rsyslog
+
+### Auditd configuration file parameters.
+## The configuration file is not set by default. Make sure to do your
+## research and add what is required. Please don't just copy paste
+## things you find on the internet. Understand the settings prior to
+## using the settings. If unknown then just fall back to the original
+## rsyslog configuration from the package.
+
+role_rsyslog_conf_file:
+  dest: /etc/rsyslog.conf
+  src: rsyslog_conf.j2
+  owner: root
+  group: root
+  mode: '0640'
+  parameters:
+    - '#### MODULES ####'
+    - '$ModLoad imuxsock'
+    - '$ModLoad imjournal'
+    - ''
+    - '#### GLOBAL DIRECTIVES ####'
+    - '$WorkDirectory /var/lib/rsyslog'
+    - '$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat'
+    - '$IncludeConfig /etc/rsyslog.d/*.conf'
+    - '$OmitLocalLogging on'
+    - '$IMJournalStateFile imjournal.state'
+    - '$FileCreateMode 0640'
+    - ''
+    - '#### RULES ####'
+    - '*.info;mail.none;authpriv.none;cron.none   /var/log/messages'
+    - 'authpriv.*                                 /var/log/secure'
+    - 'mail.*                                     -/var/log/maillog'
+    - 'cron.*                                     /var/log/cron'
+    - '*.emerg                                    :omusrmsg:*'
+    - 'uucp,news.crit                             /var/log/spooler'
+    - 'local7.*                                   /var/log/boot.log'
+
+...
